@@ -1,0 +1,2207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HardToCrack — Privacidad Real. Sin Compromisos.</title>
+<meta name="description" content="Dispositivos Google Pixel con GrapheneOS preinstalado y configurado. Privacidad total desde el primer encendido. Envío discreto a toda España.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080b10;
+    --bg2: #0d1117;
+    --bg3: #111820;
+    --surface: #141c26;
+    --surface2: #1a2436;
+    --border: #1e2d42;
+    --border2: #243345;
+    --accent: #00d4ff;
+    --accent2: #0099cc;
+    --accent3: #00ff88;
+    --warn: #ff6b35;
+    --text: #e8f0f8;
+    --text2: #8ba3bd;
+    --text3: #4a6a8a;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent2); border-radius: 2px; }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: rgba(8,11,16,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 1.1rem;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-logo span { color: var(--accent3); }
+
+  nav ul {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  nav a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: var(--mono);
+    transition: color 0.2s;
+  }
+
+  nav a:hover { color: var(--accent); }
+
+  .nav-cta {
+    background: var(--accent) !important;
+    color: var(--bg) !important;
+    padding: 0.4rem 1.2rem;
+    border-radius: 2px;
+    font-weight: 700;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 100px 5% 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black, transparent);
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: 20%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-glow2 {
+    position: absolute;
+    bottom: -10%;
+    left: -5%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(0,255,136,0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    max-width: 700px;
+  }
+
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--accent3);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: var(--accent3);
+  }
+
+  h1 {
+    font-size: clamp(2.8rem, 6vw, 5.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  h1 .accent { color: var(--accent); }
+  h1 .accent-green { color: var(--accent3); }
+
+  .hero-sub {
+    font-size: 1.1rem;
+    color: var(--text2);
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    max-width: 560px;
+    font-weight: 400;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    padding: 0.9rem 2rem;
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    border-radius: 2px;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover {
+    background: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0,212,255,0.3);
+  }
+
+  .btn-secondary {
+    border: 1px solid var(--border2);
+    color: var(--text2);
+    padding: 0.9rem 2rem;
+    text-decoration: none;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    letter-spacing: 0.08em;
+    border-radius: 2px;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .hero-stats {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1.2rem 1.5rem;
+    border-radius: 4px;
+    text-align: center;
+    min-width: 140px;
+  }
+
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* SECTIONS */
+  section { padding: 100px 5%; }
+
+  .section-tag {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    font-size: clamp(1.8rem, 3.5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+  }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0;
+  }
+
+  /* WHY SECTION */
+  .why-section {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .why-intro {
+    max-width: 700px;
+    margin-bottom: 4rem;
+  }
+
+  .why-intro p {
+    color: var(--text2);
+    line-height: 1.8;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .why-card {
+    background: var(--bg2);
+    padding: 2.5rem;
+    transition: background 0.2s;
+  }
+
+  .why-card:hover { background: var(--surface); }
+
+  .why-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+    display: block;
+  }
+
+  .why-card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    color: var(--text);
+  }
+
+  .why-card p {
+    font-size: 0.9rem;
+    color: var(--text2);
+    line-height: 1.7;
+  }
+
+  .threat-list {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .threat-item {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--warn);
+    padding: 0.3rem 0.6rem;
+    background: rgba(255,107,53,0.08);
+    border-left: 2px solid var(--warn);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* CATALOG */
+  .catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .device-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .device-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,212,255,0.1);
+  }
+
+  .device-card.featured {
+    border-color: var(--accent);
+  }
+
+  .device-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    border-radius: 2px;
+  }
+
+  .badge-entry { background: rgba(0,255,136,0.15); color: var(--accent3); border: 1px solid rgba(0,255,136,0.3); }
+  .badge-advanced { background: rgba(0,212,255,0.15); color: var(--accent); border: 1px solid rgba(0,212,255,0.3); }
+  .badge-pro { background: rgba(255,107,53,0.15); color: var(--warn); border: 1px solid rgba(255,107,53,0.3); }
+
+  .device-img {
+    width: 100%;
+    height: 240px;
+    background: linear-gradient(135deg, #0d1117 0%, #1a2436 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .device-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.85;
+  }
+
+  .device-img-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .phone-svg {
+    width: 100px;
+    height: 180px;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.5;
+    opacity: 0.6;
+  }
+
+  .device-glow-ring {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,212,255,0.12) 0%, transparent 70%);
+  }
+
+  .device-body { padding: 1.8rem; }
+
+  .device-name {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin-bottom: 0.3rem;
+    color: var(--text);
+  }
+
+  .device-sub {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text3);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .specs-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .spec-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 0.8rem;
+    border-radius: 2px;
+  }
+
+  .spec-label {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+  }
+
+  .spec-value {
+    font-family: var(--mono);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .spec-note {
+    font-size: 0.72rem;
+    color: var(--text2);
+    margin-top: 0.2rem;
+    line-height: 1.4;
+  }
+
+  .device-desc {
+    font-size: 0.88rem;
+    color: var(--text2);
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+
+  .delivery-info {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .delivery-title {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.6rem;
+  }
+
+  .delivery-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text2);
+    margin-bottom: 0.35rem;
+    line-height: 1.4;
+  }
+
+  .delivery-row .dot {
+    color: var(--accent3);
+    margin-top: 0.1rem;
+    flex-shrink: 0;
+  }
+
+  .device-price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .price-from {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text3);
+    text-transform: uppercase;
+  }
+
+  .price-amount {
+    font-family: var(--mono);
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .price-note {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--text3);
+  }
+
+  /* PACKS */
+  .packs-section {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+  }
+
+  .packs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .pack-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2rem;
+    position: relative;
+    transition: all 0.3s;
+  }
+
+  .pack-card:hover {
+    border-color: var(--accent2);
+    transform: translateY(-3px);
+  }
+
+  .pack-card.recommended {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, var(--surface) 0%, rgba(0,212,255,0.04) 100%);
+  }
+
+  .pack-rec-badge {
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 0.2rem 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+  }
+
+  .pack-name {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+  }
+
+  .pack-device {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1.5rem;
+  }
+
+  .pack-price {
+    font-family: var(--mono);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+    line-height: 1;
+  }
+
+  .pack-price-note {
+    font-size: 0.78rem;
+    color: var(--text3);
+    margin-bottom: 1.5rem;
+  }
+
+  .pack-includes {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .pack-includes li {
+    font-size: 0.85rem;
+    color: var(--text2);
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    line-height: 1.4;
+  }
+
+  .pack-includes li::before {
+    content: '→';
+    color: var(--accent);
+    font-family: var(--mono);
+    flex-shrink: 0;
+  }
+
+  .addons-section {
+    margin-top: 3rem;
+  }
+
+  .addons-title {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1.5rem;
+  }
+
+  .addon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .addon-item {
+    background: var(--surface);
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .addon-name {
+    font-size: 0.85rem;
+    color: var(--text2);
+  }
+
+  .addon-price {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  /* PROCESS */
+  .process-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 3rem;
+    position: relative;
+  }
+
+  .process-steps::before {
+    content: '';
+    position: absolute;
+    left: 2.5rem;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+
+  .process-step {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .step-num {
+    width: 5rem;
+    height: 5rem;
+    flex-shrink: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent);
+    z-index: 1;
+  }
+
+  .step-content h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .step-content p {
+    font-size: 0.88rem;
+    color: var(--text2);
+    line-height: 1.7;
+  }
+
+  .step-time {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--accent3);
+    margin-top: 0.5rem;
+  }
+
+  /* SHIPPING */
+  .shipping-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .ship-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.8rem;
+  }
+
+  .ship-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .ship-price-tag {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 2px;
+  }
+
+  .free { background: rgba(0,255,136,0.1); color: var(--accent3); }
+  .paid { background: rgba(255,107,53,0.1); color: var(--warn); }
+
+  .ship-details {
+    font-size: 0.85rem;
+    color: var(--text2);
+    line-height: 1.7;
+    margin-top: 0.8rem;
+  }
+
+  .privacy-note {
+    background: rgba(0,212,255,0.06);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 4px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .privacy-note-icon { font-size: 1.3rem; flex-shrink: 0; }
+
+  .privacy-note p {
+    font-size: 0.88rem;
+    color: var(--text2);
+    line-height: 1.7;
+  }
+
+  /* PAYMENT */
+  .payment-section { background: var(--bg2); border-top: 1px solid var(--border); }
+
+  .payment-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .payment-col h3 {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .payment-col.recommended h3 { color: var(--accent3); border-color: rgba(0,255,136,0.3); }
+  .payment-col.accepted h3 { color: var(--accent); }
+  .payment-col.alternative h3 { color: var(--text3); }
+
+  .pay-method {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.88rem;
+  }
+
+  .pay-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .pay-name { color: var(--text); font-weight: 600; }
+  .pay-note { font-size: 0.75rem; color: var(--text3); margin-top: 0.1rem; }
+
+  /* Q&A */
+  .qa-section {}
+
+  .qa-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .qa-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.8rem;
+  }
+
+  .qa-item h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    color: var(--text);
+    padding-left: 1.2rem;
+    border-left: 2px solid var(--accent);
+  }
+
+  .qa-item p {
+    font-size: 0.88rem;
+    color: var(--text2);
+    line-height: 1.7;
+  }
+
+  /* BLOG */
+  .blog-section { background: var(--bg2); border-top: 1px solid var(--border); }
+
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .blog-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: all 0.3s;
+    display: block;
+  }
+
+  .blog-card:hover {
+    border-color: var(--accent2);
+    transform: translateY(-3px);
+  }
+
+  .blog-thumb {
+    height: 160px;
+    background: linear-gradient(135deg, var(--bg3), var(--surface2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .blog-thumb::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, var(--surface) 0%, transparent 60%);
+  }
+
+  .blog-body { padding: 1.5rem; }
+
+  .blog-cat {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.6rem;
+  }
+
+  .blog-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .blog-card p {
+    font-size: 0.82rem;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  .blog-date {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--text3);
+    margin-top: 1rem;
+  }
+
+  /* CONTACT / SIMPLEX */
+  .contact-section {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+  }
+
+  .contact-inner {
+    max-width: 700px;
+  }
+
+  .contact-inner p {
+    color: var(--text2);
+    line-height: 1.8;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+  }
+
+  .simplex-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 1rem 1.5rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 3rem 5% 2rem;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 3rem;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .footer-brand .nav-logo {
+    font-size: 1.3rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .footer-brand p {
+    font-size: 0.83rem;
+    color: var(--text3);
+    line-height: 1.7;
+    max-width: 360px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 3rem;
+  }
+
+  .footer-col h4 {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text3);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+
+  .footer-col ul { list-style: none; }
+
+  .footer-col li {
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-col a {
+    color: var(--text2);
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+  }
+
+  .footer-col a:hover { color: var(--accent); }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-legal {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--text3);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .hero-stats { display: none; }
+    .payment-grid { grid-template-columns: 1fr; }
+    .qa-grid { grid-template-columns: 1fr; }
+    nav ul { display: none; }
+    .footer-top { grid-template-columns: 1fr; }
+    .footer-links { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    section { padding: 70px 5%; }
+    .blog-grid { grid-template-columns: 1fr; }
+    .packs-grid { grid-template-columns: 1fr; }
+    .catalog-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero-content { animation: fadeIn 0.8s ease both; }
+
+  .blink {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--accent3);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  /* PAGE SECTIONS */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* BLOG ARTICLE */
+  .article-wrapper {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 120px 5% 80px;
+  }
+
+  .article-meta {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--text3);
+    margin-bottom: 0.8rem;
+  }
+
+  .article-wrapper h1 {
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    margin-bottom: 1.5rem;
+  }
+
+  .article-body p {
+    font-size: 0.95rem;
+    color: var(--text2);
+    line-height: 1.9;
+    margin-bottom: 1.2rem;
+  }
+
+  .article-body h2 {
+    font-size: 1.4rem;
+    margin: 2.5rem 0 1rem;
+    color: var(--text);
+  }
+
+  .article-body h3 {
+    font-size: 1.1rem;
+    color: var(--accent);
+    margin: 1.5rem 0 0.6rem;
+    font-family: var(--mono);
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--text3);
+    text-decoration: none;
+    margin-bottom: 2rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: color 0.2s;
+  }
+
+  .back-btn:hover { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo" onclick="showPage('main')">hard<span>to</span>crack</a>
+  <ul>
+    <li><a href="#why">Por qué</a></li>
+    <li><a href="#catalog">Catálogo</a></li>
+    <li><a href="#packs">Packs</a></li>
+    <li><a href="#shipping">Envío</a></li>
+    <li><a href="#qa">Q&A</a></li>
+    <li><a href="#" onclick="showPage('blog')">Blog</a></li>
+  </ul>
+  <a href="#packs" class="nav-cta">Ver Packs →</a>
+</nav>
+
+<!-- MAIN PAGE -->
+<div id="page-main" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+    <div class="hero-content">
+      <div class="hero-tag"><span class="blink"></span> Privacidad real. Sin compromisos.</div>
+      <h1>Tu teléfono no debería <span class="accent">espiarte.</span><br>El nuestro <span class="accent-green">no lo hace.</span></h1>
+      <p class="hero-sub">Google Pixel con GrapheneOS preinstalado, configurado y listo para usar. Enviado de forma discreta, sin vincular tu nombre al dispositivo. Desde el primer encendido, tú controlas tu privacidad.</p>
+      <div class="hero-buttons">
+        <a href="#catalog" class="btn-primary">Ver Dispositivos</a>
+        <a href="#why" class="btn-secondary">¿Por qué importa?</a>
+      </div>
+    </div>
+    <div class="hero-stats">
+      <div class="stat-card">
+        <span class="stat-num">0</span>
+        <span class="stat-label">Apps de Google<br>preinstaladas</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">100%</span>
+        <span class="stat-label">Código<br>open source</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-num">∞</span>
+        <span class="stat-label">Control<br>sobre tus datos</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="why-section" id="why">
+    <div class="section-tag">// La realidad que nadie te cuenta</div>
+    <h2>Tu smartphone Android es<br>una herramienta de vigilancia.</h2>
+    <div class="why-intro">
+      <p>Google recopila <strong>más de 20 categorías de datos personales</strong> en tiempo real desde tu dispositivo: ubicación, historial de búsquedas, contactos, patrones de uso, identificadores únicos y conversaciones. Esto ocurre aunque desactives los permisos. Los servicios de Google están integrados a nivel de sistema operativo, no como apps que puedas eliminar.</p>
+      <p>GrapheneOS es el sistema operativo de Android hardened (endurecido) más respetado del sector. Desarrollado de forma independiente, elimina toda la telemetría de Google, refuerza el sandbox de aplicaciones, cifra el almacenamiento y permite el uso de cuentas de Google en un entorno sandboxed completamente aislado si el usuario lo necesita.</p>
+      <p><strong>No es una alternativa de nicho.</strong> Es lo que usan periodistas de investigación, abogados, empresarios, inversores en cripto y cualquier persona que entiende que la privacidad digital no es paranoia — es higiene básica en 2025.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <span class="why-icon">🕵️</span>
+        <h3>Lo que Google recopila sin que lo sepas</h3>
+        <p>Ubicación GPS en segundo plano, historial completo de búsquedas y navegación, contactos y eventos del calendario, patrones de sueño y actividad física, grabaciones accidentales de "Ok Google".</p>
+        <div class="threat-list">
+          <div class="threat-item">⚠ Telemetría permanente a servidores de Google</div>
+          <div class="threat-item">⚠ Identificadores únicos irrevocables</div>
+          <div class="threat-item">⚠ Sincronización automática a la nube</div>
+        </div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">🔒</span>
+        <h3>Qué cambia con GrapheneOS</h3>
+        <p>Sistema operativo completamente auditado. Sin telemetría. Sin servicios de fondo de Google. Actualizaciones de seguridad mantenidas activamente. Sandbox de apps más estricto que iOS. Posibilidad de múltiples perfiles aislados entre sí.</p>
+        <p style="margin-top:0.8rem">Los Pixel son el único hardware que permite explotar al 100% las capacidades de seguridad de GrapheneOS, gracias a su chip Titan M2.</p>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">👤</span>
+        <h3>¿Para quién es esto?</h3>
+        <p>Para cualquiera que gestione información sensible. Pero especialmente para:</p>
+        <div class="threat-list" style="margin-top:0.8rem">
+          <div class="threat-item" style="color:var(--accent); background:rgba(0,212,255,0.06); border-color:var(--accent)">→ Inversores y holders de cripto</div>
+          <div class="threat-item" style="color:var(--accent); background:rgba(0,212,255,0.06); border-color:var(--accent)">→ Periodistas y activistas</div>
+          <div class="threat-item" style="color:var(--accent); background:rgba(0,212,255,0.06); border-color:var(--accent)">→ Abogados y profesionales legales</div>
+          <div class="threat-item" style="color:var(--accent); background:rgba(0,212,255,0.06); border-color:var(--accent)">→ Directivos con info confidencial</div>
+          <div class="threat-item" style="color:var(--accent); background:rgba(0,212,255,0.06); border-color:var(--accent)">→ Empresarios y autónomos</div>
+        </div>
+      </div>
+      <div class="why-card">
+        <span class="why-icon">📱</span>
+        <h3>Por qué Google Pixel + GrapheneOS</h3>
+        <p>Los Pixel son el único hardware oficialmente soportado. El chip de seguridad Titan M2, el Verified Boot y el soporte para relocking del bootloader hacen que la instalación sea verificable e inalterable. Nadie puede comprometer el sistema sin que tú lo notes.</p>
+        <p style="margin-top:0.8rem">Además, los Pixel reciben actualizaciones de seguridad mensuales durante <strong>7 años</strong> — el ciclo más largo del mercado Android.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATALOG -->
+  <section id="catalog">
+    <div class="section-tag">// Catálogo de dispositivos</div>
+    <h2>Elige tu nivel de privacidad.</h2>
+
+    <div class="catalog-grid">
+
+      <!-- Pixel 8a -->
+      <div class="device-card">
+        <span class="device-badge badge-entry">Entry Level</span>
+        <div class="device-img">
+          <div class="device-glow-ring"></div>
+          <svg class="phone-svg" viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
+            <rect x="10" y="5" width="80" height="170" rx="12" stroke="currentColor"/>
+            <rect x="20" y="18" width="60" height="110" rx="4" stroke="currentColor" opacity="0.5"/>
+            <circle cx="50" cy="155" r="6" stroke="currentColor"/>
+            <rect x="35" y="10" width="30" height="4" rx="2" stroke="currentColor" opacity="0.4"/>
+          </svg>
+        </div>
+        <div class="device-body">
+          <div class="device-name">Pixel 8a</div>
+          <div class="device-sub">Reacondicionado · GrapheneOS</div>
+          <div class="specs-grid">
+            <div class="spec-item">
+              <div class="spec-label">RAM</div>
+              <div class="spec-value">8 GB</div>
+              <div class="spec-note">Ideal para 1 usuario · uso fluido</div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-label">Almacenamiento</div>
+              <div class="spec-value">128 GB</div>
+              <div class="spec-note">Suficiente para uso cotidiano</div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-label">Chip</div>
+              <div class="spec-value" style="font-size:0.8rem">Tensor G3</div>
+              <div class="spec-note">+ Titan M2</div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-label">Batería</div>
+              <div class="spec-value" style="font-size:0.8rem">≥80%</div>
+              <div class="spec-note">Certificada por nuestro técnico</div>
+            </div>
+          </div>
+          <p class="device-desc">El punto de entrada perfecto para quien quiere privacidad real sin compromisos de rendimiento. Los 8 GB de RAM permiten un uso cotidiano completamente fluido en GrapheneOS con múltiples apps activas. Disponible como dispositivo reacondicionado con control de calidad certificado.</p>
+          <div class="delivery-info">
+            <div class="delivery-title">⏱ Plazos de entrega</div>
+            <div class="delivery-row"><span class="dot">•</span>10 días para adquisición + control de calidad técnico</div>
+            <div class="delivery-row"><span class="dot">•</span>2-3 días para instalación GrapheneOS, configuración y perfiles</div>
+            <div class="delivery-row"><span class="dot">•</span>Batería garantizada ≥80% · opción de batería nueva disponible</div>
+          </div>
+          <div class="delivery-info" style="background:rgba(0,255,136,0.04);border-color:rgba(0,255,136,0.2)">
+            <div class="delivery-title" style="color:var(--accent3)">💰 Precio Pack Esencial · 8a</div>
+            <div class="delivery-row" style="font-family:var(--mono);font-size:0.78rem;color:var(--text2)">Dispositivo reacondicionado&nbsp;&nbsp;<span style="color:var(--text3)">(precio mercado + gestión)</span></div>
+            <div class="delivery-row" style="font-family:var(--mono);font-size:0.78rem;color:var(--text2)">+ Pack Básico GrapheneOS&nbsp;&nbsp;<span style="color:var(--accent3)">200€</span></div>
+            <div class="delivery-row" style="font-size:0.75rem;color:var(--text3);margin-top:0.3rem">Precio final según stock disponible · consultar</div>
+          </div>
+          <div class="device-price">
+            <span class="price-from">Config desde</span>
+            <span class="price-amount">200€</span>
+            <span class="price-note">+ dispositivo</span>
+          </div>
+          <a href="#packs" class="btn-primary" style="width:100%;text-align:center;display:block">Ver packs →</a>
+        </div>
+      </div>
+
+      <!-- Pixel 9 -->
+      <div class="device-card">
+        <span class="device-badge badge-advanced">Avanzado</span>
+        <div class="device-img">
+          <div class="device-glow-ring" style="background:radial-gradient(circle, rgba(0,212,255,0.18) 0%, transparent 70%)"></div>
+          <svg class="phone-svg" viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg" style="stroke:var(--accent)">
+            <rect x="8" y="3" width="84" height="174" rx="14" stroke="currentColor"/>
+            <rect x="18" y="16" width="64" height="118" rx="5" stroke="currentColor" opacity="0.6"/>
+            <circle cx="50" cy="158" r="7" stroke="currentColor"/>
+            <rect x="33" y="8" width="34" height="5" rx="2.5" stroke="currentColor" opacity="0.5"/>
+            <circle cx="72" cy="26" r="4" stroke="currentColor" opacity="0.4"/>
+          </svg>
+        </div>
+        <div class="device-body">
+          <div class="device-name">Pixel 9</div>
+          <div class="device-sub">Nuevo · GrapheneOS</div>
+          <div class="specs-grid">
+            <div class="spec-item">
+              <div class="spec-label">RAM</div>
+              <div class="spec-value">12 GB</div>
+              <div class="spec-note">Hasta 3 usuarios · 1 activo, 2 en segundo plano</div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-label">Almacenamiento</div>
+              <div class="spec-value">256 GB</div>
+              <div class="spec-note">Amplio margen para todo</div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-label">Chip</div>
+              <div class="spec-value" style="font-size:0.8rem">Tensor G4</div>
+              <div class="spec-note">+ Titan M2</div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-label">Estado</div>
+              <div class="spec-value" style="font-size:0.8rem">Nuevo</div>
+              <div class="spec-note">Recepción en 1-2 días</div>
+            </div>
+          </div>
+          <p class="device-desc">Los 12 GB de RAM permiten gestionar <strong>hasta 3 perfiles de usuario simultáneos</strong> en GrapheneOS — uno activo en primer plano y dos operando en segundo plano sin pérdida de rendimiento. Ideal para separar vida personal, profesional y uso con apps de terceros.</p>
+          <div class="delivery-info">
+            <div class="delivery-title">⏱ Plazos de entrega</div>
+            <div class="delivery-row"><span class="dot">•</span>1-2 días recepción del dispositivo nuevo</div>
+            <div class="delivery-row"><span class="dot">•</span>2-3 días: instalación GrapheneOS, configuración de perfiles</div>
+            <div class="delivery-row"><span class="dot">•</span>Instalación de apps, licencias, registro eSIM incluidos</div>
+          </div>
+          <div class="device-price">
+            <span class="price-from">Config desde</span>
+            <span class="price-amount">250€</span>
+            <span class="price-note">+ dispositivo</span>
+          </div>
+          <a href="#packs" class="btn-primary" style="width:100%;text-align:center;display:block">Ver packs →</a>
+        </div>
+      </div>
+
+      <!-- Pixel 9 Pro -->
+      <div class="device-card featured">
+        <span class="device-badge badge-pro">Pro</span>
+        <div class="device-img">
+          <div class="device-glow-ring" style="background:radial-gradient(circle, rgba(255,107,53,0.15) 0%, transparent 70%)"></div>
+          <svg class="phone-svg" viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg" style="stroke:var(--warn)">
+            <rect x="6" y="2" width="88" height="176" rx="16" stroke="currentColor"/>
+            <rect x="16" y="15" width="68" height="122" rx="6" stroke="currentColor" opacity="0.6"/>
+            <circle cx="50" cy="160" r="7.5" stroke="currentColor"/>
+            <rect x="31" y="7" width="38" height="5" rx="2.5" stroke="currentColor" opacity="0.5"/>
+            <circle cx="74" cy="28" r="5" stroke="currentColor" opacity="0.5"/>
+            <circle cx="74" cy="42" r="5" stroke="currentColor" opacity="0.3"/>
+          </svg>
+        </div>
+        <div class="device-body">
+          <div class="device-name">Pixel 9 Pro</div>
+          <div class="device-sub">Nuevo · GrapheneOS</div>
+          <div class="specs-grid">
+            <div class="spec-item">
+              <div class="spec-label">RAM</div>
+              <div class="spec-value" style="color:var(--warn)">16 GB</div>
+              <div class="spec-note">Máximo rendimiento · total suficiencia</div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-label">Almacenamiento</div>
+              <div class="spec-value">256 GB</div>
+              <div class="spec-note">+ opción 512 GB</div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-label">Chip</div>
+              <div class="spec-value" style="font-size:0.8rem">Tensor G4</div>
+              <div class="spec-note">NPU avanzado + Titan M2</div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-label">Estado</div>
+              <div class="spec-value" style="font-size:0.8rem">Nuevo</div>
+              <div class="spec-note">Recepción en 1-2 días</div>
+            </div>
+          </div>
+          <p class="device-desc">Con 16 GB de RAM, el Pixel 9 Pro se desenvuelve con <strong>total suficiencia</strong> en cualquier escenario: múltiples perfiles activos, apps exigentes, navegación Tor, VPN activa y comunicaciones cifradas operando simultáneamente sin la menor caída de rendimiento.</p>
+          <div class="delivery-info">
+            <div class="delivery-title">⏱ Plazos de entrega</div>
+            <div class="delivery-row"><span class="dot">•</span>1-2 días recepción del dispositivo nuevo</div>
+            <div class="delivery-row"><span class="dot">•</span>2-3 días: instalación, configuración avanzada, perfiles</div>
+            <div class="delivery-row"><span class="dot">•</span>Apps, licencias, eSIM incluidas en pack</div>
+          </div>
+          <div class="device-price">
+            <span class="price-from">Config desde</span>
+            <span class="price-amount">250€</span>
+            <span class="price-note">+ dispositivo</span>
+          </div>
+          <a href="#packs" class="btn-primary" style="width:100%;text-align:center;display:block;background:var(--warn)">Ver packs →</a>
+        </div>
+      </div>
+
+      <!-- Pixel 10 Pro -->
+      <div class="device-card featured" style="border-color:rgba(255,107,53,0.5)">
+        <span class="device-badge badge-pro">Top</span>
+        <div class="device-img" style="background:linear-gradient(135deg,#0a0f16,#1c1008)">
+          <div class="device-glow-ring" style="background:radial-gradient(circle, rgba(255,107,53,0.2) 0%, transparent 70%)"></div>
+          <svg class="phone-svg" viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg" style="stroke:var(--warn);opacity:0.8">
+            <rect x="5" y="2" width="90" height="176" rx="18" stroke="currentColor"/>
+            <rect x="14" y="14" width="72" height="126" rx="7" stroke="currentColor" opacity="0.7"/>
+            <circle cx="50" cy="162" r="8" stroke="currentColor"/>
+            <rect x="30" y="6" width="40" height="5" rx="2.5" stroke="currentColor" opacity="0.6"/>
+            <circle cx="76" cy="26" r="5.5" stroke="currentColor" opacity="0.6"/>
+            <circle cx="76" cy="40" r="4.5" stroke="currentColor" opacity="0.4"/>
+            <circle cx="76" cy="53" r="3.5" stroke="currentColor" opacity="0.25"/>
+          </svg>
+        </div>
+        <div class="device-body">
+          <div class="device-name">Pixel 10 Pro</div>
+          <div class="device-sub">Nuevo · GrapheneOS · Flagship</div>
+          <div class="specs-grid">
+            <div class="spec-item">
+              <div class="spec-label">RAM</div>
+              <div class="spec-value" style="color:var(--warn)">16 GB</div>
+              <div class="spec-note">Potencia máxima absoluta</div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-label">Almacenamiento</div>
+              <div class="spec-value">256 GB</div>
+              <div class="spec-note">+ opción 512 GB / 1TB</div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-label">Chip</div>
+              <div class="spec-value" style="font-size:0.8rem">Tensor G5</div>
+              <div class="spec-note">Fabricado por TSMC + Titan M3</div>
+            </div>
+            <div class="spec-item">
+              <div class="spec-label">Estado</div>
+              <div class="spec-value" style="font-size:0.8rem">Nuevo</div>
+              <div class="spec-note">Último flagship Pixel</div>
+            </div>
+          </div>
+          <p class="device-desc">El Pixel 10 Pro es el dispositivo más avanzado disponible para GrapheneOS. El Tensor G5 fabricado por TSMC representa un salto generacional en rendimiento y eficiencia. <strong>La máxima expresión de la privacidad.</strong> Para quienes no admiten compromisos en ningún aspecto.</p>
+          <div class="delivery-info">
+            <div class="delivery-title">⏱ Plazos de entrega</div>
+            <div class="delivery-row"><span class="dot">•</span>1-2 días recepción del dispositivo nuevo</div>
+            <div class="delivery-row"><span class="dot">•</span>2-3 días: instalación, configuración avanzada, perfiles</div>
+            <div class="delivery-row"><span class="dot">•</span>Setup premium completo · soporte técnico incluido</div>
+          </div>
+          <div class="device-price">
+            <span class="price-from">Config desde</span>
+            <span class="price-amount">250€</span>
+            <span class="price-note">+ dispositivo</span>
+          </div>
+          <a href="#packs" class="btn-primary" style="width:100%;text-align:center;display:block;background:var(--warn)">Ver packs →</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PACKS & PRICING -->
+  <section class="packs-section" id="packs">
+    <div class="section-tag">// Packs y precios</div>
+    <h2>Todo lo que necesitas.<br>Desde el primer encendido.</h2>
+    <p style="color:var(--text2);max-width:600px;line-height:1.7;margin-top:1rem">Cada pack incluye el dispositivo configurado y listo para usar. El cliente solo tiene que abrir la caja. Sin tecnicismos, sin configuración por su parte.</p>
+
+    <div class="packs-grid">
+
+      <div class="pack-card">
+        <div class="pack-name">Pack Esencial</div>
+        <div class="pack-device">Pixel 8a reacondicionado</div>
+        <div class="pack-price">200€ <span style="font-size:1rem;color:var(--text3)">config</span></div>
+        <div class="pack-price-note">+ coste dispositivo según stock · consultar</div>
+        <ul class="pack-includes">
+          <li>Dispositivo Pixel 8a reacondicionado · batería ≥80%</li>
+          <li>GrapheneOS instalado y verificado</li>
+          <li>1 perfil de usuario configurado</li>
+          <li>Apps de privacidad esenciales instaladas</li>
+          <li>Manual de uso impreso incluido</li>
+          <li>Envío discreto a locker o Parcel Shop</li>
+        </ul>
+        <a href="#contact" class="btn-secondary" style="width:100%;text-align:center;display:block">Consultar precio →</a>
+      </div>
+
+      <div class="pack-card recommended">
+        <div class="pack-rec-badge">MÁS SOLICITADO</div>
+        <div class="pack-name">Pack Privacidad Total</div>
+        <div class="pack-device">Pixel 9 · 12 GB · 256 GB</div>
+        <div class="pack-price">250€ <span style="font-size:1rem;color:var(--text3)">config</span></div>
+        <div class="pack-price-note">+ coste dispositivo nuevo · consultar</div>
+        <ul class="pack-includes">
+          <li>Pixel 9 nuevo · 12 GB RAM · 256 GB</li>
+          <li>GrapheneOS instalado y verificado</li>
+          <li>Hasta 3 perfiles configurados y aislados</li>
+          <li>Apps seleccionadas por perfil de uso</li>
+          <li>Licencias de apps registradas</li>
+          <li>eSIM configurada y operativa (alta incluida)</li>
+          <li>Manual de uso + guía de operativa diaria</li>
+          <li>1 mes de soporte técnico vía SimpleX</li>
+        </ul>
+        <a href="#contact" class="btn-primary" style="width:100%;text-align:center;display:block">Consultar precio →</a>
+      </div>
+
+      <div class="pack-card">
+        <div class="pack-name">Pack Pro</div>
+        <div class="pack-device">Pixel 9 Pro · 16 GB · 256 GB</div>
+        <div class="pack-price">250€ <span style="font-size:1rem;color:var(--text3)">config</span></div>
+        <div class="pack-price-note">+ coste dispositivo nuevo · consultar</div>
+        <ul class="pack-includes">
+          <li>Pixel 9 Pro nuevo · 16 GB RAM · 256 GB</li>
+          <li>GrapheneOS instalado y verificado</li>
+          <li>Múltiples perfiles configurados</li>
+          <li>Setup avanzado de comunicaciones cifradas</li>
+          <li>Licencias y apps premium registradas</li>
+          <li>eSIM configurada y operativa</li>
+          <li>Manual + guía operativa diaria completa</li>
+          <li>3 meses de soporte técnico vía SimpleX</li>
+        </ul>
+        <a href="#contact" class="btn-secondary" style="width:100%;text-align:center;display:block">Consultar precio →</a>
+      </div>
+
+      <div class="pack-card" style="border-color:rgba(255,107,53,0.4)">
+        <div class="pack-name">Pack Flagship</div>
+        <div class="pack-device">Pixel 10 Pro · 16 GB · 256 GB+</div>
+        <div class="pack-price">250€ <span style="font-size:1rem;color:var(--text3)">config</span></div>
+        <div class="pack-price-note">+ coste dispositivo nuevo · consultar</div>
+        <ul class="pack-includes">
+          <li>Pixel 10 Pro nuevo · 16 GB RAM</li>
+          <li>GrapheneOS con hardening avanzado</li>
+          <li>Configuración de seguridad máxima</li>
+          <li>Setup completo de perfiles y comunicaciones</li>
+          <li>Todas las licencias incluidas</li>
+          <li>eSIM + número privado configurado</li>
+          <li>Manual completo + guía avanzada</li>
+          <li>6 meses soporte técnico vía SimpleX</li>
+        </ul>
+        <a href="#contact" class="btn-secondary" style="width:100%;text-align:center;display:block;border-color:var(--warn);color:var(--warn)">Consultar precio →</a>
+      </div>
+
+    </div>
+
+    <!-- ADD-ONS -->
+    <div class="addons-section">
+      <div class="addons-title">// Servicios y add-ons disponibles</div>
+      <div class="addon-grid">
+        <div class="addon-item">
+          <div>
+            <div class="addon-name">Alta y configuración eSIM</div>
+            <div class="pay-note">Número privado · alta operativa completa</div>
+          </div>
+          <div class="addon-price">Consultar</div>
+        </div>
+        <div class="addon-item">
+          <div>
+            <div class="addon-name">Batería nueva (Pixel 8a)</div>
+            <div class="pay-note">Sustitución por técnico de confianza</div>
+          </div>
+          <div class="addon-price">Consultar</div>
+        </div>
+        <div class="addon-item">
+          <div>
+            <div class="addon-name">Renovación de licencias de apps</div>
+            <div class="pay-note">Anual · apps seleccionadas</div>
+          </div>
+          <div class="addon-price">Consultar</div>
+        </div>
+        <div class="addon-item">
+          <div>
+            <div class="addon-name">Soporte técnico mensual</div>
+            <div class="pay-note">Acceso a soporte por SimpleX</div>
+          </div>
+          <div class="addon-price">Consultar</div>
+        </div>
+        <div class="addon-item">
+          <div>
+            <div class="addon-name">Renovación datos eSIM</div>
+            <div class="pay-note">Recarga de bono de datos privado</div>
+          </div>
+          <div class="addon-price">Consultar</div>
+        </div>
+        <div class="addon-item">
+          <div>
+            <div class="addon-name">Configuración GrapheneOS (solo instalación)</div>
+            <div class="pay-note">Para quien ya tiene su Pixel</div>
+          </div>
+          <div class="addon-price">Desde 200€</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="section-tag">// Qué hacemos antes de entregarte el dispositivo</div>
+    <h2>Del pedido a tu mano.<br>Sin que toques nada.</h2>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="step-num">01</div>
+        <div class="step-content">
+          <h3>Adquisición del dispositivo</h3>
+          <p>Compramos el dispositivo bajo demanda. En el caso del Pixel 8a reacondicionado, nuestro técnico de confianza realiza una inspección física completa: pantalla, batería, cámara, conectividad, estado del hardware. Solo dispositivos que superan nuestros estándares son aceptados. La batería se certifica con un mínimo del 80% de capacidad original.</p>
+          <div class="step-time">⏱ Pixel 8a reacondicionado: ~10 días · Nuevos: 1-2 días</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">02</div>
+        <div class="step-content">
+          <h3>Instalación de GrapheneOS</h3>
+          <p>Instalamos GrapheneOS desde cero siguiendo el proceso oficial con Verified Boot activo. El bootloader se re-bloquea tras la instalación, de forma que el sistema queda verificado criptográficamente y no puede ser alterado sin que el propietario lo note. Se verifica la integridad completa del sistema antes de continuar.</p>
+          <div class="step-time">⏱ 2-3 días (incluye configuración completa)</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">03</div>
+        <div class="step-content">
+          <h3>Configuración de perfiles y apps</h3>
+          <p>Configuramos los perfiles de usuario según el pack elegido. Cada perfil queda completamente aislado de los demás a nivel de datos, apps y credenciales. Instalamos las aplicaciones seleccionadas, registramos las licencias operativas, y configuramos las comunicaciones cifradas.</p>
+          <div class="step-time">⏱ Incluido en el plazo de 2-3 días</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">04</div>
+        <div class="step-content">
+          <h3>Registro y alta de eSIM</h3>
+          <p>Si el pack incluye eSIM, gestionamos el alta con el operador y la configuramos directamente en el dispositivo. El cliente no tiene que hacer ningún trámite. Al abrir la caja, el número ya está activo y operativo. La eSIM queda registrada de forma que maximiza la privacidad del titular.</p>
+          <div class="step-time">⏱ Incluido en el proceso de configuración</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="step-num">05</div>
+        <div class="step-content">
+          <h3>Empaquetado y envío discreto</h3>
+          <p>El dispositivo se empaqueta sin ninguna referencia al remitente, al producto ni al servicio contratado. El envío nunca va a nombre del cliente: validamos la privacidad de cada persona desde el primer momento. Se incluye manual de uso impreso y guía de operativa diaria para manejarse con soltura aunque no se tenga experiencia previa con el sistema.</p>
+          <div class="step-time">⏱ Envío en 24-48h tras configuración</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SHIPPING -->
+  <section style="background:var(--bg2);border-top:1px solid var(--border)" id="shipping">
+    <div class="section-tag">// Envío y entrega</div>
+    <h2>Envío discreto. Tu nombre,<br>fuera del paquete.</h2>
+    <div class="shipping-grid">
+      <div class="ship-card">
+        <h3>Envío estándar a locker <span class="ship-price-tag free">GRATIS</span></h3>
+        <div class="ship-details">Entrega en locker de Seur o InPost. Recibirás un PIN para recogerlo tú mismo, a tu ritmo, sin necesidad de estar en casa. Disponible para Península y Baleares. <strong>Canarias no disponible por el momento.</strong></div>
+      </div>
+      <div class="ship-card">
+        <h3>Envío a Parcel Shop <span class="ship-price-tag free">GRATIS</span></h3>
+        <div class="ship-details">Entrega en punto de recogida Parcel Shop. Más de 1.500 puntos en toda España peninsular y Baleares. Cómodo y discreto — nadie te espera, recóges cuando quieras.</div>
+      </div>
+      <div class="ship-card">
+        <h3>Envío urgente 1 día laborable <span class="ship-price-tag paid">12€</span></h3>
+        <div class="ship-details">Recogida en punto de entrega Seur al día laborable siguiente. Para cuando no puedes esperar. Mismas condiciones de discreción y privacidad.</div>
+      </div>
+      <div class="ship-card">
+        <h3>Entrega en persona</h3>
+        <div class="ship-details">Disponible en ubicaciones acordadas. Se recomienda realizar el pago con anterioridad al encuentro. Consulta disponibilidad y zona a través de SimpleX.</div>
+      </div>
+    </div>
+    <div class="privacy-note">
+      <div class="privacy-note-icon">🛡️</div>
+      <p><strong>Política de privacidad en el envío:</strong> Ningún paquete sale con el nombre del cliente en el remitente. El embalaje no contiene referencias al producto, al servicio ni a HardToCrack. No guardamos datos de envío más allá del tiempo necesario para la gestión logística. Tu privacidad empieza antes de que el paquete salga de nuestras manos.</p>
+    </div>
+  </section>
+
+  <!-- PAYMENT -->
+  <section class="payment-section" id="payment">
+    <div class="section-tag">// Métodos de pago</div>
+    <h2>Paga como quieras.<br>Preferiblemente, con privacidad.</h2>
+    <div class="payment-grid">
+      <div class="payment-col recommended">
+        <h3>✅ Métodos recomendados</h3>
+        <div class="pay-method">
+          <div class="pay-icon">⬡</div>
+          <div>
+            <div class="pay-name">Monero (XMR)</div>
+            <div class="pay-note">La opción más privada. Transacciones no rastreables.</div>
+          </div>
+        </div>
+        <div class="pay-method">
+          <div class="pay-icon">💶</div>
+          <div>
+            <div class="pay-name">Efectivo por mensajero</div>
+            <div class="pay-note">Para entregas en persona. Máxima discreción.</div>
+          </div>
+        </div>
+      </div>
+      <div class="payment-col accepted">
+        <h3>✓ Criptomonedas aceptadas</h3>
+        <div class="pay-method">
+          <div class="pay-icon">₿</div>
+          <div>
+            <div class="pay-name">Bitcoin (BTC)</div>
+            <div class="pay-note">Aceptado · se recomienda uso con mezclador</div>
+          </div>
+        </div>
+        <div class="pay-method">
+          <div class="pay-icon">Ξ</div>
+          <div>
+            <div class="pay-name">Ethereum (ETH)</div>
+            <div class="pay-note">Aceptado</div>
+          </div>
+        </div>
+        <div class="pay-method">
+          <div class="pay-icon">$</div>
+          <div>
+            <div class="pay-name">USDC · USDT · EURC</div>
+            <div class="pay-note">Stablecoins aceptadas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:2rem;background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:1.5rem">
+      <div style="font-family:var(--mono);font-size:0.7rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:1rem">⚠ Métodos alternativos — no recomendados por privacidad</div>
+      <p style="font-size:0.85rem;color:var(--text3);line-height:1.7">Por necesidad operativa también aceptamos: SEPA/transferencia bancaria, link de pago con tarjeta y PayPal. <strong>No se recomiendan</strong> si la privacidad es prioritaria para ti — estos métodos dejan rastro identificable. Son opciones para quien priorizó la comodidad sobre la discreción.</p>
+    </div>
+  </section>
+
+  <!-- Q&A -->
+  <section id="qa">
+    <div class="section-tag">// Preguntas frecuentes</div>
+    <h2>Respuestas directas.<br>Sin rodeos.</h2>
+    <div class="qa-grid">
+      <div class="qa-item">
+        <h3>¿Puedo seguir usando mis apps normales (WhatsApp, Instagram…)?</h3>
+        <p>Sí. GrapheneOS permite instalar apps de Google Play en un sandbox aislado. Puedes usar las apps que necesites, pero estarán contenidas sin acceso a tu información real. Te explicamos cómo configurarlo en el manual incluido.</p>
+      </div>
+      <div class="qa-item">
+        <h3>¿Qué pasa si me hacen un reseteo de fábrica?</h3>
+        <p>El sistema está configurado para que un reseteo de fábrica por terceros no comprometa tus datos. El cifrado completo del almacenamiento hace que los datos sean irrecuperables sin tu PIN o contraseña.</p>
+      </div>
+      <div class="qa-item">
+        <h3>¿Recibo actualizaciones de seguridad?</h3>
+        <p>Sí. GrapheneOS publica actualizaciones de seguridad mensualmente, siguiendo el ciclo de parches de Google. Los Pixel 8, 9 y 10 tienen soporte garantizado de 7 años desde su lanzamiento. Las actualizaciones se instalan de forma silenciosa.</p>
+      </div>
+      <div class="qa-item">
+        <h3>¿Los perfiles de usuario están realmente aislados?</h3>
+        <p>Completamente. Cada perfil funciona como un teléfono independiente dentro del mismo hardware. Las apps de un perfil no pueden acceder a los datos de otro. Ni los contactos, ni los archivos, ni las claves de cifrado. Es la forma más segura de separar identidades digitales.</p>
+      </div>
+      <div class="qa-item">
+        <h3>¿Qué es la eSIM y por qué la ofrecéis?</h3>
+        <p>La eSIM es una SIM digital integrada en el dispositivo. Permite activar una línea sin necesidad de una SIM física, lo que añade una capa de privacidad ya que no requiere recogida en tienda ni vinculación directa de documentación. Gestionamos el alta completa por ti.</p>
+      </div>
+      <div class="qa-item">
+        <h3>¿Necesito conocimientos técnicos para usarlo?</h3>
+        <p>No. El dispositivo llega configurado y listo para usar. Incluimos un manual impreso y una guía de operativa diaria diseñados para que cualquier persona sin conocimientos técnicos se maneje con total soltura desde el primer día.</p>
+      </div>
+      <div class="qa-item">
+        <h3>¿Podéis configurar mi propio Pixel existente?</h3>
+        <p>Sí. Ofrecemos el servicio de instalación de GrapheneOS y configuración básica desde 200€ para quien ya dispone de un Pixel compatible. Consulta disponibilidad y modelos soportados a través de SimpleX.</p>
+      </div>
+      <div class="qa-item">
+        <h3>¿Cómo recibo soporte después de la compra?</h3>
+        <p>El soporte técnico se presta exclusivamente a través de SimpleX Chat — la app de mensajería cifrada más privada disponible. Sin número de teléfono, sin datos personales. Los packs incluyen meses de soporte según nivel. También puedes contratar soporte mensual como add-on.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact-section" id="contact">
+    <div class="section-tag">// Contacto</div>
+    <h2>Hablemos.<br>Solo a través de canales seguros.</h2>
+    <div class="contact-inner">
+      <p>Priorizamos siempre los canales más privados. Elige el que más te convenga — respondemos en todos ellos.</p>
+      <p style="color:var(--text3);font-size:0.82rem;margin-bottom:2rem">Para consultas sobre pedidos, dudas sobre packs o soporte técnico, SimpleX es el canal recomendado. Para primeros contactos informales puedes usar Telegram o email, pero ten en cuenta que estos canales dejan más rastro.</p>
+
+      <div style="display:flex;flex-direction:column;gap:1rem">
+
+        <a href="https://smp5.simplexonflux.com/a#Qi96g6HsSbpV7x7uRfYqbPFIkzGbksDGFrM-diL-LQA" target="_blank" class="simplex-badge" style="text-decoration:none;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--border)'">
+          <span>💬</span>
+          <div>
+            <div style="color:var(--accent);font-weight:700">SimpleX Chat — Canal recomendado</div>
+            <div style="font-size:0.65rem;color:var(--text3);margin-top:0.2rem">Sin número de teléfono · sin metadatos · máxima privacidad · haz clic para abrir</div>
+          </div>
+          <span style="margin-left:auto;font-size:0.7rem;color:var(--text3)">→</span>
+        </a>
+
+        <a href="https://t.me/HardToCrackOS" target="_blank" class="simplex-badge" style="text-decoration:none;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--accent2)'" onmouseout="this.style.borderColor='var(--border)'">
+          <span>✈️</span>
+          <div>
+            <div style="color:var(--text);font-weight:700">Telegram · @HardToCrackOS</div>
+            <div style="font-size:0.65rem;color:var(--text3);margin-top:0.2rem">Para primeros contactos · respuesta más rápida</div>
+          </div>
+          <span style="margin-left:auto;font-size:0.7rem;color:var(--text3)">→</span>
+        </a>
+
+        <a href="mailto:info@hardtocrack.com" class="simplex-badge" style="text-decoration:none;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--text3)'" onmouseout="this.style.borderColor='var(--border)'">
+          <span>✉️</span>
+          <div>
+            <div style="color:var(--text2);font-weight:700">Email · info@hardtocrack.com</div>
+            <div style="font-size:0.65rem;color:var(--text3);margin-top:0.2rem">No recomendado para información sensible</div>
+          </div>
+          <span style="margin-left:auto;font-size:0.7rem;color:var(--text3)">→</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG PREVIEW -->
+  <section class="blog-section" id="blog-preview">
+    <div class="section-tag">// Blog · Privacidad &amp; OPSEC</div>
+    <h2>Conocimiento que te protege.</h2>
+    <div class="blog-grid">
+      <a class="blog-card" onclick="showBlog('post1')" href="#">
+        <div class="blog-thumb">🔒</div>
+        <div class="blog-body">
+          <div class="blog-cat">Privacidad · Fundamentos</div>
+          <h3>Por qué Android stock es una amenaza para tu privacidad en 2025</h3>
+          <p>Un análisis técnico de la telemetría integrada en Android y los servicios de Google que operan sin tu consentimiento real.</p>
+          <div class="blog-date">Mayo 2025</div>
+        </div>
+      </a>
+      <a class="blog-card" onclick="showBlog('post2')" href="#">
+        <div class="blog-thumb">₿</div>
+        <div class="blog-body">
+          <div class="blog-cat">OPSEC · Cripto</div>
+          <h3>Cómo proteger tus wallets de cripto desde el móvil: guía para holders</h3>
+          <p>Si tienes cripto, tu teléfono es el eslabón más débil. Te explicamos cómo blindarlo sin necesidad de conocimientos técnicos.</p>
+          <div class="blog-date">Abril 2025</div>
+        </div>
+      </a>
+      <a class="blog-card" onclick="showBlog('post3')" href="#">
+        <div class="blog-thumb">⚖️</div>
+        <div class="blog-body">
+          <div class="blog-cat">Profesionales · Legal</div>
+          <h3>Confidencialidad profesional en la era digital: guía para abogados y asesores</h3>
+          <p>El secreto profesional no termina en el despacho. Todo lo que necesitas saber para proteger la información de tus clientes en el móvil.</p>
+          <div class="blog-date">Marzo 2025</div>
+        </div>
+      </a>
+      <a class="blog-card" onclick="showBlog('post4')" href="#">
+        <div class="blog-thumb">🕵️</div>
+        <div class="blog-body">
+          <div class="blog-cat">GrapheneOS · Técnico</div>
+          <h3>GrapheneOS vs LineageOS vs CalyxOS: cuál es mejor y por qué</h3>
+          <p>Comparativa honesta de los tres sistemas operativos de privacidad más relevantes del mercado. Ventajas, limitaciones y para quién es cada uno.</p>
+          <div class="blog-date">Febrero 2025</div>
+        </div>
+      </a>
+      <a class="blog-card" onclick="showBlog('post5')" href="#">
+        <div class="blog-thumb">🏢</div>
+        <div class="blog-body">
+          <div class="blog-cat">Empresas · Directivos</div>
+          <h3>Espionaje corporativo y fugas de información: el riesgo que nadie toma en serio</h3>
+          <p>Los smartphones de empresa son el vector de ataque más subestimado. Casos reales y cómo protegerte si gestionas información sensible.</p>
+          <div class="blog-date">Enero 2025</div>
+        </div>
+      </a>
+    </div>
+    <div style="text-align:center;margin-top:3rem">
+      <a onclick="showPage('blog')" href="#" class="btn-secondary">Ver todos los artículos →</a>
+    </div>
+  </section>
+
+</div><!-- /page-main -->
+
+<!-- BLOG PAGE -->
+<div id="page-blog" class="page">
+  <div style="padding-top:64px">
+
+    <!-- BLOG POST 1 -->
+    <div id="blog-post1" class="page active" style="display:none">
+      <div class="article-wrapper">
+        <button class="back-btn" onclick="showPage('blog')">← Volver al blog</button>
+        <div class="article-meta">Privacidad · Fundamentos · Mayo 2025</div>
+        <h1>Por qué Android stock es una amenaza para tu privacidad en 2025</h1>
+        <div class="article-body">
+          <p>Hay una conversación que no tiene lugar en los grandes medios tecnológicos. No porque sea difícil de entender, sino porque incomoda demasiado a los que venden publicidad. La conversación sobre lo que tu smartphone Android hace con tus datos cada segundo que lo llevas en el bolsillo.</p>
+          <h2>El modelo de negocio que nadie te explica</h2>
+          <p>Google no es una empresa de tecnología en el sentido tradicional. Es la empresa de publicidad más grande del mundo, y su producto principal eres tú — o más concretamente, el perfil de comportamiento que construyen sobre ti. Android, Google Maps, Chrome, Gmail, YouTube: son herramientas de recolección de datos con funcionalidades adicionales para que las uses de buena gana.</p>
+          <p>En 2018, investigadores de la Universidad de Vanderbilt documentaron que un dispositivo Android inactivo, con el usuario desconectado, transmitía datos a los servidores de Google aproximadamente cada 4,9 minutos. En 24 horas, eso son alrededor de 340 transmisiones de datos sin que el usuario haya hecho nada.</p>
+          <h2>Qué datos se recopilan exactamente</h2>
+          <h3>Ubicación</h3>
+          <p>Aunque desactives el GPS, Google puede inferir tu ubicación mediante triangulación de redes WiFi y torres de telefonía. Los datos de ubicación se transmiten incluso cuando todas las apps tienen el permiso revocado, porque los Servicios de Google Play operan a un nivel del sistema operativo que está por encima de los permisos de usuario.</p>
+          <h3>Identificadores únicos</h3>
+          <p>Tu dispositivo genera identificadores únicos que persisten aunque restablezcas el teléfono de fábrica. El Android ID, el ID de publicidad, el IMEI, el número de serie del hardware: todos se transmiten regularmente y permiten que Google te reconozca aunque cambies de cuenta.</p>
+          <h3>Historial de aplicaciones</h3>
+          <p>Google registra qué aplicaciones tienes instaladas, con qué frecuencia las abres, cuánto tiempo las usas y en qué orden. Esta información, combinada con datos de ubicación, permite inferir hábitos de vida, orientación política, afiliación religiosa, situación económica y mucho más.</p>
+          <h2>Por qué los ajustes de privacidad no bastan</h2>
+          <p>El problema fundamental es que los Servicios de Google Play no son una app que puedas desinstalar. Están integrados en el sistema operativo con privilegios de nivel de sistema. Cuando en los ajustes "desactivas" la recopilación de datos, lo que realmente haces es desactivar una capa de interfaz — la recopilación a nivel de sistema continúa.</p>
+          <p>GrapheneOS es la única solución que aborda este problema a nivel arquitectónico. Al eliminar los Servicios de Google Play del sistema operativo y ofrecerlos opcionalmente como sandbox aislado, rompe la cadena de recopilación de datos en origen.</p>
+          <h2>Conclusión</h2>
+          <p>La privacidad en Android no es un problema de configuración. Es un problema de diseño. El sistema está construido para recopilar datos — ajustar configuraciones es cosmético. La única solución real es cambiar el sistema operativo. Y la mejor opción disponible hoy, sin discusión, es GrapheneOS sobre hardware Google Pixel.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOG POST 2 -->
+    <div id="blog-post2" class="page" style="display:none">
+      <div class="article-wrapper">
+        <button class="back-btn" onclick="showPage('blog')">← Volver al blog</button>
+        <div class="article-meta">OPSEC · Cripto · Abril 2025</div>
+        <h1>Cómo proteger tus wallets de cripto desde el móvil: guía para holders</h1>
+        <div class="article-body">
+          <p>Si tienes criptomonedas, tu mayor riesgo no es un hack en un exchange. Es tu teléfono móvil. El vector de ataque más infravalorado en el ecosistema cripto es el dispositivo que llevas en el bolsillo y que está conectado a internet las 24 horas.</p>
+          <h2>El ataque que nadie espera: SIM Swapping</h2>
+          <p>El SIM swapping es el proceso por el que un atacante convence a tu operador de telefonía para transferir tu número de móvil a una SIM que él controla. Con tu número, puede interceptar los SMS de autenticación de dos factores y acceder a tus cuentas de exchange, email y cualquier servicio vinculado.</p>
+          <p>En España, este tipo de ataque ha comprometido a holders con patrimonios de seis cifras. Los atacantes suelen combinar ingeniería social con información de LinkedIn, redes sociales y filtraciones de datos previas para construir un perfil convincente ante el operador.</p>
+          <h2>Por qué un móvil estándar es vulnerable</h2>
+          <h3>Apps espía y keyloggers</h3>
+          <p>En Android stock, es técnicamente posible que una app maliciosa lea el portapapeles (donde copias y pegas tus seed phrases), registre pulsaciones de teclado o capture la pantalla en segundo plano. Los permisos no siempre son suficientes como barrera.</p>
+          <h3>Acceso físico</h3>
+          <p>Un dispositivo que se puede desbloquear con PIN simple o reconocimiento facial básico no es un dispositivo seguro. GrapheneOS implementa opciones de bloqueo más robustas, incluyendo la posibilidad de borrado automático tras intentos fallidos.</p>
+          <h2>La solución: separación de identidades con perfiles aislados</h2>
+          <p>GrapheneOS permite crear múltiples perfiles de usuario completamente aislados. La estrategia óptima para un holder serio es: un perfil limpio sin apps de terceros dedicado exclusivamente a wallets y operaciones cripto, y un perfil separado para el uso cotidiano. Los perfiles no comparten datos, procesos ni memoria.</p>
+          <h2>Mejores prácticas adicionales</h2>
+          <p>Nunca almacenes tu seed phrase en el dispositivo, ni siquiera cifrada. Usa hardware wallet para cantidades significativas. Desactiva el acceso remoto al dispositivo. Usa una eSIM en lugar de SIM física para dificultar el SIM swapping. Configura un PIN de bloqueo fuerte de al menos 8 dígitos.</p>
+          <h2>Conclusión</h2>
+          <p>La comunidad cripto invierte tiempo y dinero en hardware wallets y seguridad operativa en exchanges, pero descuida el dispositivo más expuesto: el móvil. Un Pixel con GrapheneOS correctamente configurado elimina la mayoría de vectores de ataque móvil documentados. No es un lujo para paranóicos — es la higiene mínima para quien gestiona patrimonio digital.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOG POST 3 -->
+    <div id="blog-post3" class="page" style="display:none">
+      <div class="article-wrapper">
+        <button class="back-btn" onclick="showPage('blog')">← Volver al blog</button>
+        <div class="article-meta">Profesionales · Legal · Marzo 2025</div>
+        <h1>Confidencialidad profesional en la era digital: guía para abogados y asesores</h1>
+        <div class="article-body">
+          <p>El secreto profesional es la piedra angular del ejercicio del Derecho. Sin él, no existe relación de confianza entre abogado y cliente, y sin esa confianza, no existe defensa posible. Lo que pocos despachos han asimilado todavía es que ese secreto profesional tiene hoy una dimensión digital que va mucho más allá del correo electrónico cifrado.</p>
+          <h2>Dónde vive realmente la información confidencial</h2>
+          <p>Piensa en lo que hay en tu teléfono ahora mismo: conversaciones de WhatsApp con clientes, correos con estrategias de defensa, fotos de documentos confidenciales, contactos de testigos, grabaciones de reuniones. Todo eso transita por servidores de terceros — Meta, Google, Apple — sin que tengas control real sobre dónde acaba.</p>
+          <h2>El problema de WhatsApp en contextos legales</h2>
+          <p>WhatsApp usa cifrado de extremo a extremo para el contenido de los mensajes. Pero los metadatos — quién habla con quién, cuándo, con qué frecuencia — se recopilan y pueden ser objeto de orden judicial. Más importante: los backups en Google Drive o iCloud se almacenan sin el cifrado de extremo a extremo de la app. Cualquier resolución judicial sobre esas cuentas expone toda la correspondencia.</p>
+          <h2>La solución: comunicaciones cifradas sobre hardware seguro</h2>
+          <p>Signal es el estándar de la industria para comunicaciones profesionales seguras. Session y SimpleX eliminan incluso los metadatos. Pero todas estas soluciones de software son tan seguras como el hardware que las ejecuta. De nada sirve Signal si el sistema operativo tiene acceso al micrófono en segundo plano.</p>
+          <p>Un dispositivo con GrapheneOS ofrece el nivel de seguridad hardware-software que necesita un profesional legal: sandbox estricto para cada app, sin telemetría del sistema, cifrado completo del almacenamiento y perfiles separados para asuntos distintos.</p>
+          <h2>Responsabilidad deontológica</h2>
+          <p>El Estatuto General de la Abogacía establece el deber de guardar secreto profesional de forma activa. Con la creciente digitalización, mantener ese deber activo requiere adoptar medidas técnicas proporcionadas al nivel de sensibilidad de la información manejada. El uso de herramientas que por diseño exponen metadatos a terceros podría interpretarse como negligencia en el cumplimiento de ese deber.</p>
+          <h2>Conclusión</h2>
+          <p>La confidencialidad profesional no es compatible con usar el mismo smartphone que usa cualquier usuario de Instagram. Los profesionales del Derecho, la asesoría financiera y cualquier ámbito donde opere el secreto profesional necesitan soluciones de seguridad a la altura de sus obligaciones. GrapheneOS sobre Pixel es, hoy, el estándar de facto.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOG POST 4 -->
+    <div id="blog-post4" class="page" style="display:none">
+      <div class="article-wrapper">
+        <button class="back-btn" onclick="showPage('blog')">← Volver al blog</button>
+        <div class="article-meta">GrapheneOS · Técnico · Febrero 2025</div>
+        <h1>GrapheneOS vs LineageOS vs CalyxOS: cuál es mejor y por qué</h1>
+        <div class="article-body">
+          <p>Cuando alguien empieza a investigar alternativas de privacidad para Android, inevitablemente tropieza con tres nombres: GrapheneOS, LineageOS y CalyxOS. Los tres son sistemas operativos basados en Android de código abierto. Las diferencias entre ellos son fundamentales, y determinan para qué tipo de usuario es adecuado cada uno.</p>
+          <h2>LineageOS: la alternativa de longevidad</h2>
+          <p>LineageOS es el proyecto más antiguo y con mayor base de dispositivos soportados. Su objetivo principal es dar vida útil extendida a dispositivos que ya no reciben actualizaciones oficiales del fabricante. No está diseñado específicamente para la privacidad — es una ROM de uso general.</p>
+          <p>Desde el punto de vista de seguridad, LineageOS tiene limitaciones importantes: no soporta el re-bloqueo del bootloader en la mayoría de dispositivos, lo que significa que el sistema no puede verificar criptográficamente su propia integridad. Para uso general, es una opción válida. Para seguridad seria, no.</p>
+          <h2>CalyxOS: buen equilibrio, limitado por diseño</h2>
+          <p>CalyxOS está específicamente orientado a la privacidad y viene con MicroG integrado por defecto — una reimplementación de los Servicios de Google Play que permite compatibilidad con apps sin exponer todos los datos a Google. Es una solución pragmática y bien ejecutada.</p>
+          <p>Sus limitaciones vienen por la inclusión de MicroG por defecto: al mantener una capa de compatibilidad con el ecosistema Google, el aislamiento no es tan completo como en GrapheneOS. Para usuarios que necesitan compatibilidad máxima con el ecosistema Android es una buena opción.</p>
+          <h2>GrapheneOS: el estándar de seguridad</h2>
+          <p>GrapheneOS es el único de los tres diseñado desde cero con seguridad como objetivo primario, no como característica adicional. Desarrollado originalmente por Daniel Micay, ha evolucionado hasta convertirse en el sistema operativo de privacidad más auditado y reconocido del sector.</p>
+          <p>Sus ventajas diferenciales son técnicamente sólidas: soporte completo para re-bloqueo del bootloader en hardware Pixel (Verified Boot completo), sandbox más estricto que el Android estándar para todas las apps, Sandboxed Google Play para quien necesite compatibilidad, actualizaciones de seguridad mensuales, y un historial de respuesta rápida ante vulnerabilidades.</p>
+          <h2>La conclusión sin ambigüedades</h2>
+          <p>Para uso profesional, para quienes manejan información sensible, para holders de cripto, para abogados, periodistas o cualquier persona con un modelo de amenaza real: GrapheneOS sobre Pixel es la única opción que satisface todos los criterios de seguridad simultáneamente. Las otras son opciones válidas para otros contextos.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOG POST 5 -->
+    <div id="blog-post5" class="page" style="display:none">
+      <div class="article-wrapper">
+        <button class="back-btn" onclick="showPage('blog')">← Volver al blog</button>
+        <div class="article-meta">Empresas · Directivos · Enero 2025</div>
+        <h1>Espionaje corporativo y fugas de información: el riesgo que nadie toma en serio</h1>
+        <div class="article-body">
+          <p>Las empresas invierten miles de euros en firewalls, VPNs corporativas y auditorías de seguridad perimetral. Y luego su CEO sale de la reunión del consejo, saca el móvil personal con Android stock y responde un WhatsApp sobre la operación que acaban de aprobar. Ahí se acaba la seguridad perimetral.</p>
+          <h2>El eslabón más débil no está en el CPD</h2>
+          <p>Los vectores de ataque corporativo han cambiado. Las brechas de datos de alto impacto raramente vienen de hackeos sofisticados de infraestructura. Vienen de dispositivos personales de directivos, de conversaciones en apps de mensajería no cifradas, de backups automáticos en servicios cloud personales que nadie controla.</p>
+          <h2>Qué información sale por tu móvil sin que lo sepas</h2>
+          <p>Las apps de productividad más usadas en entornos corporativos — Microsoft Teams, Slack, Google Workspace — tienen políticas de retención de datos y posibilidades de acceso por autoridades que pocas empresas han leído. Si un directivo usa su cuenta personal de Gmail para reenviar documentos confidenciales, esos documentos están en servidores de Google indefinidamente.</p>
+          <h2>El perfil de riesgo del directivo</h2>
+          <p>Un director general, financiero o de operaciones tiene en su móvil: planes estratégicos, datos de M&A, información sobre proveedores y márgenes, comunicaciones con el consejo, datos de clientes, y acceso a sistemas corporativos. Todo eso, en un dispositivo que en muchos casos tiene un PIN de 4 dígitos y backup automático en Google Drive.</p>
+          <h2>La solución empresarial real</h2>
+          <p>La solución no pasa por políticas de uso aceptable que nadie lee. Pasa por dotar a las personas que manejan información sensible de dispositivos que, por diseño técnico, minimicen el riesgo de fuga. Un Pixel con GrapheneOS, con perfiles separados para uso corporativo y personal, con comunicaciones cifradas y sin telemetría de terceros, es la implementación práctica de una política de seguridad móvil seria.</p>
+          <h2>El coste de no hacer nada</h2>
+          <p>Una fuga de información estratégica puede suponer desde pérdida de ventaja competitiva hasta responsabilidades legales bajo el GDPR. El coste de un dispositivo seguro para roles críticos es una fracción mínima del coste potencial de un incidente de seguridad. Es una decisión de gestión de riesgos, no de tecnología.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOG INDEX -->
+    <div id="blog-index" class="page active" style="padding:120px 5% 80px">
+      <div class="section-tag">// Blog · HardToCrack</div>
+      <h2>Privacidad, ciberseguridad<br>y OPSEC sin filtros.</h2>
+      <p style="color:var(--text2);max-width:560px;line-height:1.7;margin:1rem 0 3rem">Conocimiento práctico para quienes entienden que la privacidad digital no es paranoia — es una necesidad.</p>
+      <div class="blog-grid">
+        <a class="blog-card" onclick="showBlog('post1')" href="#">
+          <div class="blog-thumb">🔒</div>
+          <div class="blog-body">
+            <div class="blog-cat">Privacidad · Fundamentos</div>
+            <h3>Por qué Android stock es una amenaza para tu privacidad en 2025</h3>
+            <p>Telemetría integrada, servicios sin consentimiento real y por qué los ajustes de privacidad no son suficientes.</p>
+            <div class="blog-date">Mayo 2025</div>
+          </div>
+        </a>
+        <a class="blog-card" onclick="showBlog('post2')" href="#">
+          <div class="blog-thumb">₿</div>
+          <div class="blog-body">
+            <div class="blog-cat">OPSEC · Cripto</div>
+            <h3>Cómo proteger tus wallets de cripto desde el móvil</h3>
+            <p>SIM swapping, keyloggers y por qué tu móvil es el eslabón más débil si tienes cripto.</p>
+            <div class="blog-date">Abril 2025</div>
+          </div>
+        </a>
+        <a class="blog-card" onclick="showBlog('post3')" href="#">
+          <div class="blog-thumb">⚖️</div>
+          <div class="blog-body">
+            <div class="blog-cat">Profesionales · Legal</div>
+            <h3>Confidencialidad profesional en la era digital</h3>
+            <p>Guía para abogados y asesores que manejan información bajo secreto profesional.</p>
+            <div class="blog-date">Marzo 2025</div>
+          </div>
+        </a>
+        <a class="blog-card" onclick="showBlog('post4')" href="#">
+          <div class="blog-thumb">🕵️</div>
+          <div class="blog-body">
+            <div class="blog-cat">GrapheneOS · Técnico</div>
+            <h3>GrapheneOS vs LineageOS vs CalyxOS</h3>
+            <p>Comparativa honesta de los tres sistemas de privacidad más relevantes del mercado.</p>
+            <div class="blog-date">Febrero 2025</div>
+          </div>
+        </a>
+        <a class="blog-card" onclick="showBlog('post5')" href="#">
+          <div class="blog-thumb">🏢</div>
+          <div class="blog-body">
+            <div class="blog-cat">Empresas · Directivos</div>
+            <h3>Espionaje corporativo: el riesgo que nadie toma en serio</h3>
+            <p>El vector de ataque más subestimado en empresas es el móvil personal del directivo.</p>
+            <div class="blog-date">Enero 2025</div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /page-blog -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="nav-logo" onclick="showPage('main')">hard<span>to</span>crack</a>
+      <p>Dispositivos Google Pixel con GrapheneOS preinstalado y configurado. Privacidad real desde el primer encendido. Envío discreto a Península y Baleares.</p>
+      <div style="margin-top:1.2rem;display:flex;flex-direction:column;gap:0.5rem">
+        <a href="https://smp5.simplexonflux.com/a#Qi96g6HsSbpV7x7uRfYqbPFIkzGbksDGFrM-diL-LQA" target="_blank" style="font-family:var(--mono);font-size:0.7rem;color:var(--accent);text-decoration:none">💬 SimpleX Chat (recomendado)</a>
+        <a href="https://t.me/HardToCrackOS" target="_blank" style="font-family:var(--mono);font-size:0.7rem;color:var(--text2);text-decoration:none">✈️ Telegram · @HardToCrackOS</a>
+        <a href="mailto:info@hardtocrack.com" style="font-family:var(--mono);font-size:0.7rem;color:var(--text3);text-decoration:none">✉️ info@hardtocrack.com</a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Dispositivos</h4>
+        <ul>
+          <li><a href="#catalog">Pixel 8a</a></li>
+          <li><a href="#catalog">Pixel 9</a></li>
+          <li><a href="#catalog">Pixel 9 Pro</a></li>
+          <li><a href="#catalog">Pixel 10 Pro</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Servicios</h4>
+        <ul>
+          <li><a href="#packs">Packs</a></li>
+          <li><a href="#packs">Add-ons</a></li>
+          <li><a href="#shipping">Envío</a></li>
+          <li><a href="#contact">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Info</h4>
+        <ul>
+          <li><a href="#why">Por qué GrapheneOS</a></li>
+          <li><a href="#qa">Q&A</a></li>
+          <li><a onclick="showPage('blog')" href="#">Blog</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-legal">© 2025 HardToCrack · Todos los derechos reservados</div>
+    <div class="footer-legal">SimpleX · @HardToCrackOS · info@hardtocrack.com · <span style="color:var(--accent)">hardtocrack.com</span></div>
+  </div>
+</footer>
+
+<script>
+  function showPage(page) {
+    document.querySelectorAll('#page-main, #page-blog').forEach(p => p.classList.remove('active'));
+    if (page === 'main') {
+      document.getElementById('page-main').classList.add('active');
+    } else if (page === 'blog') {
+      document.getElementById('page-blog').classList.add('active');
+      // Show blog index, hide all posts
+      document.getElementById('blog-index').style.display = 'block';
+      ['post1','post2','post3','post4','post5'].forEach(id => {
+        document.getElementById('blog-'+id).style.display = 'none';
+      });
+    }
+    window.scrollTo(0,0);
+  }
+
+  function showBlog(postId) {
+    document.getElementById('page-main').classList.remove('active');
+    document.getElementById('page-blog').classList.add('active');
+    document.getElementById('blog-index').style.display = 'none';
+    ['post1','post2','post3','post4','post5'].forEach(id => {
+      document.getElementById('blog-'+id).style.display = 'none';
+    });
+    document.getElementById('blog-'+postId).style.display = 'block';
+    window.scrollTo(0,0);
+    return false;
+  }
+
+  // Smooth reveal on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.device-card, .pack-card, .why-card, .blog-card, .ship-card, .qa-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
